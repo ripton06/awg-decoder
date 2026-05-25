@@ -1,74 +1,69 @@
-# AmneziaWG Config Decoder & Encoder
+# AmneziaVPN / AmneziaWG Decoder
 
-Скрипт для преобразования конфигураций [AmneziaWG](https://github.com/amnezia-vpn/amneziawg-linux-kernel-module) в формат `vpn://` и обратно. Подразумевается, что у вас уже установлен Python 3.11.x
+Утилиты для конвертации конфигураций AmneziaWG и ссылок `vpn://`.
 
-## Оглавление
+Форк основан на проекте [JB-SelfCompany/awg-decoder](https://github.com/JB-SelfCompany/awg-decoder) и добавляет самодостаточный GUI-декодер для Windows.
 
-- [Возможности](#возможности)
-- [Установка](#установка)
-- [Использование](#использование)
-- [Заметки](#заметки)
-- [Поддержка](#поддержка)
+## Что умеет
 
-## Возможности
+- Декодировать ссылку `vpn://` в файл `NewConfig.conf`.
+- Понимать новый JSON-формат экспорта AmneziaVPN и извлекать из него AmneziaWG `.conf`.
+- Кодировать `.conf` обратно в ссылку `vpn://`.
+- Не перезаписывать существующие файлы: новые файлы получают имена `NewConfig_1.conf`, `NewConfig_2.conf`, `NewLink_1.txt` и так далее.
+- Работать как обычный Python-скрипт или как собранное Windows-приложение `.exe`.
 
-- Преобразование конфигураций в формате `.conf` в `vpn://`
-- Обратное преобразование из формата `vpn://` в `.conf`
+## Простой запуск
 
-## Установка
+Самый удобный вариант для пользователя Windows:
 
-Клонируйте репозиторий:
+1. Запустить `AmneziaVPN Decoder.exe`.
+2. Вставить ссылку `vpn://` или использовать ссылку из буфера обмена.
+3. Нажать `Создать conf`.
 
-    git clone https://github.com/JB-SelfCompany/awg-decoder.git
+Файл появится рядом с приложением.
 
-Перейдите в склонированный репозиторий:
-  
-    cd awg-decoder
+## Python-версия
 
-  #### Опционально (рекомендуется устанавливать библиотеки в виртуальное окружение)
+Для запуска из исходников нужен Python 3.11+.
 
-  Создайте и активируйте виртуальное окружение для Python:
+Внешние pip-библиотеки не нужны. GUI использует стандартный модуль `tkinter`, который обычно устанавливается вместе с Python для Windows.
 
-    python3.11 -m venv myenv
+```powershell
+python simple-awg-decoder.py
+```
 
-  Активация виртуального окружения для Linux:
-    
-    source myenv/bin/activate
+Консольное декодирование:
 
-  Для Windows:
-  
-    python -m myenv\Scripts\activate
+```powershell
+python simple-awg-decoder.py --link "vpn://..."
+```
 
-## Использование
+Обратная конвертация `.conf -> vpn://`:
 
-Для кодирования файла в формате `.conf` в `vpn://` используйте следующую команду:
+```powershell
+python simple-awg-decoder.py --encode-file .\Amnezia2.conf
+```
 
-    python3.11 awg-decoder.py --encode test.conf -o vpn.txt
+## Сборка exe
 
-Для декодирования из формата `vpn://` в `.conf` используйте следующую команду:
+Для сборки нужен PyInstaller:
 
-    python3.11 awg-decoder.py --decode "vpn://..." -o decoded.conf
+```powershell
+python -m pip install pyinstaller
+python -m PyInstaller --onefile --windowed --name "AmneziaVPN Decoder" --clean .\simple-awg-decoder.py
+```
 
-## Заметки
+Готовый файл будет создан в папке `dist`.
 
-При использовании ключа `-o` (`--output`) можно указывать любой формат файла на ваш выбор. К примеру, `.txt` или `.vpn`. 
+## Старый CLI-декодер
 
-Так же, можно не использовать ключи для вывода в файл. К примеру, вывод следующей команды будет в консоли: 
+`awg-decode.py` оставлен для совместимости с исходным проектом:
 
-`python3.11 awg-decoder.py --encode test.conf`
+```powershell
+python awg-decode.py --decode "vpn://..." -o my_config.conf
+python awg-decode.py --encode .\config.conf -o link.txt
+```
 
-С декодированием аналогично. К примеру, вывод следующей команды будет в консоли:
+## Лицензия
 
-`python3.11 awg-decoder.py --decode "vpn://..."`
-
-## Поддержка
-
-Поддержать разработчика можете следующими способами:
-- [Boosty](https://boosty.to/jb-selfcompany/donate)
-- LTC `ltc1qsa49jtpxau9f28fej7vpzj99lstx44792k4ack`
-- XMR `43ojbNWXSNCWjXAk1RbTvidACZKrWSpV7hXRosn9UQJhWEHHkzCB4g8Hh5sHhSzU7gBpwWkMFhgwuPLLuox6GqEQN7CLgHp`
-- BTC `bc1qt75kx0lwsw2npfh06kfq37gf97eper00sxp3tf` 
-
-Если у вас возникли вопросы или проблемы с установкой и использованием, создайте [issue](https://github.com/JB-SelfCompany/awg-decoder/issues) в этом репозитории или обратитесь к разработчику.
-
-- [Matrix](https://matrix.to/#/@jack_benq:shd.company)
+Проект распространяется по лицензии GPL-3.0. См. [LICENSE](LICENSE).

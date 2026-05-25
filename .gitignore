@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+
+build/
+dist/
+*.log
+
+NewConfig*.conf
+NewLink*.txt
+Amnezia2.conf
+my_config.conf
+Сценарий Windows.cmd
+
+.venv/
+venv/
+env/
