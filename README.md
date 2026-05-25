@@ -1,26 +1,38 @@
-# AmneziaVPN / AmneziaWG Decoder
+# AmneziaVPN 2.0 / AmneziaWG 2.0 Decoder
 
-Утилиты для конвертации конфигураций AmneziaWG и ссылок `vpn://`.
+Форк исправляет декодирование новых ссылок `vpn://` из AmneziaVPN 2.0 и извлечение конфигураций AmneziaWG 2.0.
 
-Форк основан на проекте [JB-SelfCompany/awg-decoder](https://github.com/JB-SelfCompany/awg-decoder) и добавляет самодостаточный GUI-декодер для Windows.
+Оригинальный проект [JB-SelfCompany/awg-decoder](https://github.com/JB-SelfCompany/awg-decoder) корректно работал со старым форматом, но для новых ссылок AmneziaVPN мог сохранять JSON-экспорт вместо готового `.conf`. В этом форке добавлена поддержка нового JSON-формата AmneziaVPN 2.0, самодостаточный GUI-декодер для Windows и сборка `.exe`.
 
-## Что умеет
+## Что исправлено и добавлено
 
-- Декодировать ссылку `vpn://` в файл `NewConfig.conf`.
-- Понимать новый JSON-формат экспорта AmneziaVPN и извлекать из него AmneziaWG `.conf`.
-- Кодировать `.conf` обратно в ссылку `vpn://`.
-- Не перезаписывать существующие файлы: новые файлы получают имена `NewConfig_1.conf`, `NewConfig_2.conf`, `NewLink_1.txt` и так далее.
-- Работать как обычный Python-скрипт или как собранное Windows-приложение `.exe`.
+- Исправлено декодирование ссылок `vpn://` из AmneziaVPN 2.0.
+- Добавлено извлечение готового AmneziaWG 2.0 `.conf` из JSON-экспорта AmneziaVPN.
+- Добавлен самодостаточный GUI-декодер `simple-awg-decoder.py`.
+- Добавлена сборка Windows-приложения `AmneziaVPN Decoder.exe` без консольного окна.
+- Добавлена обратная конвертация `.conf -> vpn://`.
+- Новые файлы не перезаписывают старые: используются имена `NewConfig.conf`, `NewConfig_1.conf`, `NewLink.txt`, `NewLink_1.txt` и так далее.
 
 ## Простой запуск
 
 Самый удобный вариант для пользователя Windows:
 
-1. Запустить `AmneziaVPN Decoder.exe`.
-2. Вставить ссылку `vpn://` или использовать ссылку из буфера обмена.
-3. Нажать `Создать conf`.
+1. Скачать `AmneziaVPN Decoder.exe` из [Releases](https://github.com/ripton06/awg-decoder/releases).
+2. Запустить приложение.
+3. Вставить ссылку `vpn://` или использовать ссылку из буфера обмена.
+4. Нажать `Создать conf`.
 
-Файл появится рядом с приложением.
+Файл `NewConfig.conf` появится рядом с приложением.
+
+## Обратная конвертация
+
+Чтобы создать ссылку `vpn://` из файла AmneziaWG `.conf`:
+
+1. Запустите приложение.
+2. Нажмите `AmneziaWG -> AmneziaVPN`.
+3. Выберите `.conf` файл.
+
+Ссылка будет сохранена рядом с приложением в `NewLink.txt`.
 
 ## Python-версия
 
@@ -41,7 +53,7 @@ python simple-awg-decoder.py --link "vpn://..."
 Обратная конвертация `.conf -> vpn://`:
 
 ```powershell
-python simple-awg-decoder.py --encode-file .\Amnezia2.conf
+python simple-awg-decoder.py --encode-file .\config.conf
 ```
 
 ## Сборка exe
